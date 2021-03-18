@@ -37,6 +37,8 @@ includelib \masm32\lib\kernel32.lib
       
         lea eax, txtInput ; Armazena o RA digitado
     
+    ; ///////////////////////////////// Ordenacao do RA /////////////////////////////////
+
     ; Chama metodo de troca de posicoes
     ordenar:
         cmp ebx, 4 ; Esta no fim do vetor
@@ -85,7 +87,7 @@ includelib \masm32\lib\kernel32.lib
 
         jmp ordenar
     
-    ; ///////////////////////////////////////////////// Novos /////////////////////////////////////////////////
+    ; ///////////////////////////////// Contagem de Repeticao /////////////////////////////////
     
     ; For com indice lento
     primeiroFor:
