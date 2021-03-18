@@ -158,6 +158,7 @@ includelib \masm32\lib\kernel32.lib
 
         jmp comRepeticao
 
+    ; Fim do programa
     fim:
         end main
 
