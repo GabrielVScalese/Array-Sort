@@ -28,6 +28,7 @@ includelib \masm32\lib\kernel32.lib
     main:
         mov ebx, 0
         mov ecx, 0
+        mov edx, 0
         lea edi, repeticao ; Contem valores repetidos
         
         print offset szPrompt ; Printa cabecalho
@@ -135,6 +136,10 @@ includelib \masm32\lib\kernel32.lib
         inc ecx
         jmp primeiroFor
     
+    contarRepetidos:
+        
+
+
     ; Fim de todo o programa, onde printa-se os valores finais
     fim:
         print eax
