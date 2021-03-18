@@ -94,7 +94,7 @@ includelib \masm32\lib\kernel32.lib
         cmp ebx, 5
         jne segundoFor
 
-        jmp fim
+        jmp ultimaEtapa
     
     ; For com indice rapido
     segundoFor:
@@ -134,14 +134,34 @@ includelib \masm32\lib\kernel32.lib
         mov ecx, ebx
         inc ecx
         jmp primeiroFor
-        
-    ; Fim de todo o programa, onde printa-se os valores finais
-    fim:
-        print eax
+    
+    ; Se o RA nao tem repeticao
+    semRepeticao:
         print chr$(10, 13)
-        print chr$("Numero (s) repetidos: ")
+        print chr$("RA sem repeticao")
+        jmp fim
+    
+    ; Se o RA tem repeticao
+    comRepeticao:
+        print chr$(10, 13)
+        print chr$("Numero (s) repetido (s): ")
         print edi
+        jmp fim
+        
+    ; Penultima funcao, para verificar como serao printados os valores
+    ultimaEtapa:
+        print eax
+
+        mov dl, byte ptr[edi]
+        cmp dl, 0
+        je semRepeticao
+
+        jmp comRepeticao
+
+    fim:
         end main
+
+    
 
 
 
