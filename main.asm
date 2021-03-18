@@ -21,7 +21,7 @@ includelib \masm32\lib\kernel32.lib
 
 
 .data?
-    txtInput    db          250 dup(?)    
+    txtInput    db          250 dup(0)    
     
 
 .code
@@ -112,12 +112,13 @@ includelib \masm32\lib\kernel32.lib
 
     ; Insere os valores repetidos encontrados no RA
     inserirRepetido:
-        mov dl, byte ptr[eax + 6 + esi - 2]
+        mov dl, byte ptr[edi + esi - 2]
 
         cmp dl, dh
         je apenasSeguir
 
         mov byte ptr[edi + esi], dh
+        mov byte ptr[edi + esi + 1], ","
         add esi, 2
         inc ecx
         jmp segundoFor
