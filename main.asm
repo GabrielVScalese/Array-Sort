@@ -16,12 +16,12 @@ includelib \masm32\lib\kernel32.lib
 
 
 .data 
-    szPrompt    db          'Digite seu RA: ', 0
-    repeticao   db          100 dup (0)
+    szPrompt    db          'Digite seu RA: ', 0 ; String para cabecalho
+    repeticao   db          100 dup (0) ; Array que contem a contagem de repeticao
 
 
 .data?
-    txtInput    db          250 dup(0)    
+    txtInput    db          250 dup(0) ; Array que representa o RA fornecido pelo usuario
     
 
 .code
@@ -72,7 +72,7 @@ includelib \masm32\lib\kernel32.lib
         mov esi, 0
         xor ebx, ebx
         mov ecx, 1
-        jmp primeiroFor2
+        jmp primeiroFor
 
     ; Zerar o contador para recomecar a troca de posicoes
     zerarCont:
@@ -90,33 +90,19 @@ includelib \masm32\lib\kernel32.lib
     
     ; ///////////////////////////////// Contagem de Repeticao /////////////////////////////////
     
-    ; Se o RA nao tem repeticao
-    semRepeticao:
-        print chr$(10, 13)
-        print chr$("RA sem repeticao")
-        jmp fim
-    
-    ; Se o RA tem repeticao
-    comRepeticao:
-        print chr$(10, 13)
-        print chr$("Numero (s) repetido (s): ")
-        print edi
-        jmp fim
-    
-
-    ; //////////////////////////////////////////////
-
-    primeiroFor2:
+    ; Primeiro for para indice lento
+    primeiroFor:
         mov dh, byte ptr[eax + ebx]
         
         cmp ebx, 5
-        jne segundoFor2
+        jne segundoFor
 
         jmp ultimaEtapa
     
-    segundoFor2:
+    ; Segundo for para indice rapido
+    segundoFor:
         cmp ecx, 5
-        je reiniciarRapido2
+        je reiniciarRapido
 
         mov dl, byte ptr[eax + ecx]
     
@@ -125,34 +111,38 @@ includelib \masm32\lib\kernel32.lib
 
         inc ecx
 
-        jmp segundoFor2
+        jmp segundoFor
     
+    ; Funcao que verifica e insere, se puder, o elementor repetido
     realizarContagem:
-        mov dl, byte ptr[eax + ebx - 1]
+        mov dl, byte ptr[eax + ebx - 1] ; Obtem o elemento anteriror ao elemento lento atual
 
-        cmp dh, dl
-        je apenasSeguir2
+        cmp dh, dl ; Verifica se ja houve contagem desse elemento
+        je apenasSeguir
 
         inc esi
         inc ecx
-        jmp segundoFor2
+        jmp segundoFor
     
-    apenasSeguir2:
+    ; Funcao que apenas continua todo o processo de loop
+    apenasSeguir:
         inc ecx
-        jmp segundoFor2
+        jmp segundoFor
     
-    reiniciarRapido2:
-        add esi, 48
+    ; Reinicia o indice rapido, e se houver contagem de elemento repetido, guarda o mesmo
+    reiniciarRapido:
+        add esi, 48 ; Converte para caracter ASCII
 
-        cmp esi, 48
+        cmp esi, 48 ; Verifica se houve contagem (se esi for 0 quer dizer que nao foi incrementado)
         jg inserirContagem
 
         xor esi, esi
         inc ebx
         mov ecx, ebx
         inc ecx
-        jmp primeiroFor2
+        jmp primeiroFor
     
+    ; Insere a contagem na string de edi
     inserirContagem:
         inc esi
 
@@ -170,9 +160,22 @@ includelib \masm32\lib\kernel32.lib
         xor esi, esi
         inc ebx
         inc ecx
-        jmp primeiroFor2
+        jmp primeiroFor
 
-    ; //////////////////////////////////////////////
+    ; ///////////////////////////////// Printar valores /////////////////////////////////
+
+    ; Se o RA nao tem repeticao
+    semRepeticao:
+        print chr$(10, 13)
+        print chr$("RA sem repeticao")
+        jmp fim
+    
+    ; Se o RA tem repeticao
+    comRepeticao:
+        print chr$(10, 13)
+        print chr$("Numero (s) repetido (s): ")
+        print edi
+        jmp fim
             
     ; Penultima funcao, para verificar como serao printados os valores
     ultimaEtapa:
