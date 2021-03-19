@@ -1,4 +1,4 @@
- .386                   
+.386                   
 .model flat, stdcall
 .stack 4096                   
 option casemap :none                    
@@ -96,7 +96,11 @@ includelib \masm32\lib\kernel32.lib
         cmp ebx, 5
         jne segundoFor
 
-        jmp ultimaEtapa
+        xor dh, dh
+        xor ebx, ebx
+        mov ecx, 1
+        xor esi, esi
+        jmp primeiroFor2
     
     ; For com indice rapido
     segundoFor:
@@ -149,7 +153,74 @@ includelib \masm32\lib\kernel32.lib
         print chr$("Numero (s) repetido (s): ")
         print edi
         jmp fim
+    
+
+    ; //////////////////////////////////////////////
+
+    primeiroFor2:
+        mov dh, byte ptr[eax + ebx]
         
+        cmp ebx, 5
+        jne segundoFor2
+
+        jmp ultimaEtapa
+    
+    segundoFor2:
+        cmp ecx, 5
+        je reiniciarRapido2
+
+        mov dl, byte ptr[eax + ecx]
+    
+        cmp dh, dl
+        je realizarContagem
+
+        inc ecx
+
+        jmp segundoFor2
+    
+    realizarContagem:
+        mov dl, byte ptr[eax + ebx - 1]
+
+        cmp dh, dl
+        je apenasSeguir2
+
+        inc esi
+        inc ecx
+        jmp segundoFor2
+    
+    apenasSeguir2:
+        inc ecx
+        jmp segundoFor2
+    
+    reiniciarRapido2:
+        add esi, 48
+
+        cmp esi, 48
+        jne inserirContagem
+
+        xor esi, esi
+        inc ebx
+        mov ecx, ebx
+        inc ecx
+        jmp primeiroFor2
+    
+    inserirContagem:
+        inc esi
+        mov dh, byte ptr[eax + ebx]
+        mov dword ptr[edi + ebx + 1], "["
+        mov byte ptr[edi + ebx + 2], dh
+        mov dword ptr[edi + ebx + 3], ":"
+        mov dword ptr[edi + ebx + 4], esi
+        mov dword ptr[edi + ebx + 4], "x"
+        mov dword ptr[edi + ebx + 5], "]"
+        xor esi, esi
+        inc ebx
+        mov ecx, ebx
+        inc ecx
+        jmp primeiroFor2
+
+    ; //////////////////////////////////////////////
+            
     ; Penultima funcao, para verificar como serao printados os valores
     ultimaEtapa:
         print eax
@@ -163,14 +234,3 @@ includelib \masm32\lib\kernel32.lib
     ; Fim do programa
     fim:
         end main
-
-    
-
-
-
-
-
-
-
-
-
