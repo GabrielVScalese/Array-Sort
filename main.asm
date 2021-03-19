@@ -68,10 +68,11 @@ includelib \masm32\lib\kernel32.lib
         cmp ecx, 4
         jne validar
         
+        mov ebp, 0
         mov esi, 0
         xor ebx, ebx
         mov ecx, 1
-        jmp primeiroFor
+        jmp primeiroFor2
 
     ; Zerar o contador para recomecar a troca de posicoes
     zerarCont:
@@ -88,58 +89,6 @@ includelib \masm32\lib\kernel32.lib
         jmp ordenar
     
     ; ///////////////////////////////// Contagem de Repeticao /////////////////////////////////
-    
-    ; For com indice lento
-    primeiroFor:
-        mov dh, byte ptr[eax + ebx]
-        
-        cmp ebx, 5
-        jne segundoFor
-
-        xor dh, dh
-        xor ebx, ebx
-        mov ecx, 1
-        xor esi, esi
-        jmp primeiroFor2
-    
-    ; For com indice rapido
-    segundoFor:
-        cmp ecx, 5
-        je reiniciarRapido
-
-        mov dl, byte ptr[eax + ecx]
-    
-        cmp dh, dl
-        je inserirRepetido
-
-        inc ecx
-
-        jmp segundoFor
-
-    ; Insere os valores repetidos encontrados no RA
-    inserirRepetido:
-        mov dl, byte ptr[edi + esi - 2]
-
-        cmp dl, dh
-        je apenasSeguir
-
-        mov byte ptr[edi + esi], dh
-        mov byte ptr[edi + esi + 1], ","
-        add esi, 2
-        inc ecx
-        jmp segundoFor
-    
-    ; Continua o loop sem inserir o elemento repetido
-    apenasSeguir:
-        inc ecx
-        jmp segundoFor
-    
-    ; Reinicia o indice rapido
-    reiniciarRapido:
-        inc ebx
-        mov ecx, ebx
-        inc ecx
-        jmp primeiroFor
     
     ; Se o RA nao tem repeticao
     semRepeticao:
@@ -196,7 +145,7 @@ includelib \masm32\lib\kernel32.lib
         add esi, 48
 
         cmp esi, 48
-        jne inserirContagem
+        jg inserirContagem
 
         xor esi, esi
         inc ebx
@@ -206,16 +155,20 @@ includelib \masm32\lib\kernel32.lib
     
     inserirContagem:
         inc esi
+
         mov dh, byte ptr[eax + ebx]
-        mov dword ptr[edi + ebx + 1], "["
-        mov byte ptr[edi + ebx + 2], dh
-        mov dword ptr[edi + ebx + 3], ":"
-        mov dword ptr[edi + ebx + 4], esi
-        mov dword ptr[edi + ebx + 4], "x"
-        mov dword ptr[edi + ebx + 5], "]"
+        mov dword ptr[edi + ebp], "["
+        mov byte ptr[edi + ebp + 1], dh
+        mov dword ptr[edi + ebp + 2], ":"
+        mov dword ptr[edi + ebp + 3], esi
+        mov dword ptr[edi + ebp + 4], "x"
+        mov dword ptr[edi + ebp + 5], "]"
+        
+        add ebp, 6
+        mov ecx, ebx
+
         xor esi, esi
         inc ebx
-        mov ecx, ebx
         inc ecx
         jmp primeiroFor2
 
