@@ -189,6 +189,8 @@ includelib \masm32\lib\kernel32.lib
         print eax
 
         mov dl, byte ptr[edi]
+        
+        ; Se dl for 0, quer dizer que o edi nao foi alterado
         cmp dl, 0
         je semRepeticao
 
