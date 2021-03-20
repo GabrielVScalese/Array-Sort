@@ -26,8 +26,8 @@ includelib \masm32\lib\kernel32.lib
 
 .code
     main:
-        mov ebx, 0
-        mov ecx, 0
+        mov ebx, 0 ; Contador
+        mov ecx, 0 ; Contador
         lea edi, repeticao ; Contem valores repetidos
         
         print offset szPrompt ; Printa cabecalho
@@ -39,13 +39,13 @@ includelib \masm32\lib\kernel32.lib
     
     ; ///////////////////////////////// Ordenacao do RA /////////////////////////////////
 
-    ; Chama metodo de troca de posicoes
+    ; Troca posicoes do RA se for possivel
     ordenar:
         cmp ebx, 4 ; Esta no fim do vetor
         je zerarCont
 
         mov dh, byte ptr [eax + ebx] ; Anterior
-        mov dl, byte ptr [eax + ebx + 1] ; Fim
+        mov dl, byte ptr [eax + ebx + 1] ; Proximo
 
         ; Se o anterior for maior que o proximo
         cmp dh, dl
@@ -60,21 +60,24 @@ includelib \masm32\lib\kernel32.lib
         mov dh, byte ptr[eax + ecx]
         mov dl, byte ptr[eax + ecx + 1]
 
+        ; Se o anterior for maior que o proximo a ordenacao continua
         cmp dh, dl
         jg ordenar
 
         inc ecx
 
+        ; Enquanto nao encontrou um elemento anterior maior que o proximo continua validacao
         cmp ecx, 4
         jne validar
         
+        ; RA esta ordenado
         mov ebp, 0
         mov esi, 0
         xor ebx, ebx
         mov ecx, 1
         jmp primeiroFor
 
-    ; Zerar o contador para recomecar a troca de posicoes
+    ; Zera o contador para recomecar a troca de posicoes
     zerarCont:
         xor ebx, ebx
         jmp ordenar
@@ -90,6 +93,9 @@ includelib \masm32\lib\kernel32.lib
     
     ; ///////////////////////////////// Contagem de Repeticao /////////////////////////////////
     
+    ; Abaixo dois lacos de repeticao, um lento e outro rapido, executam a funcao de verificar  
+    ; a presenca de elementos repetidos
+
     ; Primeiro for para indice lento
     primeiroFor:
         mov dh, byte ptr[eax + ebx]
@@ -101,11 +107,12 @@ includelib \masm32\lib\kernel32.lib
     
     ; Segundo for para indice rapido
     segundoFor:
-        cmp ecx, 5
+        cmp ecx, 5 ; Indice rapido ja passou por todas as posicoes
         je reiniciarRapido
 
         mov dl, byte ptr[eax + ecx]
     
+        ; Encontrou dois elementos iguais
         cmp dh, dl
         je realizarContagem
 
@@ -124,7 +131,7 @@ includelib \masm32\lib\kernel32.lib
         inc ecx
         jmp segundoFor
     
-    ; Funcao que apenas continua todo o processo de loop
+    ; Funcao que apenas continua todo o processo de loop (lacos)
     apenasSeguir:
         inc ecx
         jmp segundoFor
@@ -133,7 +140,7 @@ includelib \masm32\lib\kernel32.lib
     reiniciarRapido:
         add esi, 48 ; Converte para caracter ASCII
 
-        cmp esi, 48 ; Verifica se houve contagem (se esi for 0 quer dizer que nao foi incrementado)
+        cmp esi, 48 ; Verifica se houve contagem (se esi for 48 quer dizer que nao foi incrementado)
         jg inserirContagem
 
         xor esi, esi
@@ -147,12 +154,12 @@ includelib \masm32\lib\kernel32.lib
         inc esi
 
         mov dh, byte ptr[eax + ebx]
-        mov dword ptr[edi + ebp], "["
+        mov dword ptr[edi + ebp], "{"
         mov byte ptr[edi + ebp + 1], dh
         mov dword ptr[edi + ebp + 2], ":"
         mov dword ptr[edi + ebp + 3], esi
         mov dword ptr[edi + ebp + 4], "x"
-        mov dword ptr[edi + ebp + 5], "]"
+        mov dword ptr[edi + ebp + 5], "}"
         
         add ebp, 6
         mov ecx, ebx
