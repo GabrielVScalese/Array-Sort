@@ -17,11 +17,11 @@ includelib \masm32\lib\kernel32.lib
 
 .data 
     szPrompt    db          'Digite seu RA: ', 0 ; String para cabecalho
-    repeticao   db          100 dup (0) ; Array que contem a contagem de repeticao
+    repeticao   db          30 dup (0) ; Array que contem a contagem de repeticao
 
 
 .data?
-    txtInput    db          250 dup(0) ; Array que representa o RA fornecido pelo usuario
+    txtInput    db          5 dup(0) ; Array que representa o RA fornecido pelo usuario
     
 
 .code
@@ -32,9 +32,7 @@ includelib \masm32\lib\kernel32.lib
         
         print offset szPrompt ; Printa cabecalho
         invoke StdIn, offset txtInput, sizeof txtInput ; Espera o input do usuario
-
-        mov byte ptr txtInput [eax], 0
-      
+ 
         lea eax, txtInput ; Armazena o RA digitado
     
     ; ///////////////////////////////// Ordenacao do RA /////////////////////////////////
