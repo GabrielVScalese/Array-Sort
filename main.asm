@@ -17,7 +17,7 @@ includelib \masm32\lib\kernel32.lib
 
 .data 
     szPrompt    db          'Digite seu RA: ', 0 ; String para cabecalho
-    repeticao   db          30 dup (0) ; Array que contem a contagem de repeticao
+    repeticao   db          100 dup (0) ; Array que contem a contagem de repeticao
 
 
 .data?
